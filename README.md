@@ -1,5 +1,6 @@
 # Topotest Schlagzeilensammler
-[Link](https://redcommander735.github.io/topotest/)
+
+Kann ich leider nicht hosten, weil die von der Tagesschau nur privaten gebrauch erlauben und keine Veröffentlichung.
 
 TODO:
 -
