@@ -2,6 +2,8 @@
 
 Kann ich leider nicht hosten, weil die von der Tagesschau nur privaten gebrauch erlauben und keine Veröffentlichung.
 
+Um es auszuführen, Repo clonen, dann 'npm run dev'
+
 TODO:
 -
 - [ ] Zeitraum auswählen
