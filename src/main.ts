@@ -5,15 +5,15 @@ import { NewsElement } from './types';
 let app: HTMLDivElement
 let start: HTMLInputElement
 let end: HTMLInputElement
+let load: HTMLButtonElement
 
 function init() {
+    app = document.querySelector("#app")!
+    start = document.querySelector("#start")!
+    end = document.querySelector("#end")!
+    load = document.querySelector("#load")!
 
-
-    app = document.querySelector("#app") !
-        start = document.querySelector("#start") !
-        end = document.querySelector("#end") !
-
-        let dates: HTMLInputElement[] = [start, end]
+    let dates: HTMLInputElement[] = [start, end]
 
     dates!.forEach(element => {
         element!.addEventListener("change", event => {
@@ -21,12 +21,17 @@ function init() {
             event.stopPropagation()
 
             update()
-            // const target: HTMLInputElement = <HTMLInputElement>event.target!
-
         })
     })
+
+    load.addEventListener("onclick", () => {
+        update()
+    })
+
     try {
         loadNews(JSON.parse(localStorage.news))
+        start.value = localStorage.start
+        end.value = localStorage.end
     } catch {
         update()
     }
@@ -38,6 +43,9 @@ async function update() {
 
     let startdate = new Date(start.value)
     let enddate = new Date(end.value)
+
+    localStorage.start = start.value
+    localStorage.end = end.value
 
     let dates: Date[] = getDates(startdate, enddate)
 
