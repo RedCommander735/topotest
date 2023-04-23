@@ -2,21 +2,24 @@ import './style.css'
 import { validate_country, gen_empty_object, getCapitalByCountryName } from './filter'
 import { NewsElement } from './types';
 
+
 let app: HTMLDivElement
 let start: HTMLInputElement
 let end: HTMLInputElement
 let load: HTMLButtonElement
+let download: HTMLButtonElement
 
 function init() {
-    app = document.querySelector("#app")!
-    start = document.querySelector("#start")!
-    end = document.querySelector("#end")!
-    load = document.querySelector("#load")!
+    app = document.querySelector('#app')!
+    start = document.querySelector('#start')!
+    end = document.querySelector('#end')!
+    load = document.querySelector('#load')!
+    download = document.querySelector('#download')!
 
     let dates: HTMLInputElement[] = [start, end]
 
     dates!.forEach(element => {
-        element!.addEventListener("change", event => {
+        element!.addEventListener('change', event => {
             event.preventDefault()
             event.stopPropagation()
 
@@ -24,8 +27,19 @@ function init() {
         })
     })
 
-    load.addEventListener("click", () => {
+    load.addEventListener('click', () => {
         update()
+    })
+    download.addEventListener('click', async () => {
+        
+        let text = await genText(JSON.parse(localStorage.news))
+        const encoder = new TextEncoder();
+        const utf8Bytes = encoder.encode(text);
+
+        // Create a Blob object from the Uint8Array
+        const blob = new Blob([utf8Bytes], { type: 'text/plain; charset=utf-8' });
+        const objectUrl = URL.createObjectURL(blob);
+        window.open(objectUrl, '_blank')!.focus();
     })
 
     try {
@@ -52,7 +66,7 @@ async function update() {
 
     start.value = formatDate2(startdate)
     end.value = formatDate2(enddate)
-    
+
     localStorage.start = start.value
     localStorage.end = end.value
 
@@ -70,7 +84,7 @@ async function update() {
     loadNews(news)
 }
 
-async function loadNews(foreign_countries: Record < string, string[][] > ) {
+async function loadNews(foreign_countries: Record <string, string[][]> ) {
 
     app.innerHTML = ''
     for (const [key, value] of Object.entries(foreign_countries)) {
@@ -82,7 +96,7 @@ async function loadNews(foreign_countries: Record < string, string[][] > ) {
             country.classList.add('country')
             let capital_city: string = await getCapitalByCountryName(key)
 
-            let text: Text = document.createTextNode(key + " (" + capital_city + ")" + ": ");
+            let text: Text = document.createTextNode(key + ' (' + capital_city + ')' + ': ');
 
             country.appendChild(text);
 
@@ -94,7 +108,7 @@ async function loadNews(foreign_countries: Record < string, string[][] > ) {
                 let headline_element: HTMLDivElement = document.createElement('div')
                 headline_element.classList.add('headline')
 
-                let marker: Text = document.createTextNode("- ")
+                let marker: Text = document.createTextNode('- ')
                 let _headline = document.createElement('a')
                 _headline.href = headline[0]
                 _headline.appendChild(document.createTextNode(headline[1]))
@@ -108,6 +122,26 @@ async function loadNews(foreign_countries: Record < string, string[][] > ) {
             app.appendChild(country_wrapper)
         }
     }
+}
+
+async function genText(foreign_countries: Record <string, string[][]> ) {
+    let text = ''
+    for (const [key, value] of Object.entries(foreign_countries)) {
+        if (value.length > 0) {
+            let capital_city: string = await getCapitalByCountryName(key)
+
+            let country: string = key + ' (' + capital_city + ')' + ': ';
+            text = text + country + '\n'
+
+            for (let i = 0; i < value.length; i++) {
+                const headline: string[] = value[i];
+
+                let _headline: string = headline[1]
+                text = text + ' - ' +_headline + '\n'
+            }
+        }
+    }
+    return text
 }
 
 async function fetchNews(dates: String[]) {
@@ -127,13 +161,13 @@ async function fetchNews(dates: String[]) {
 
         for (let i = 0; i < news.length; i++) {
             const element: NewsElement = news[i];
-            if (element.ressort == "ausland") {
+            if (element.ressort == 'ausland') {
                 for (let j = 0; j < element.tags.length; j++) {
                     const tag: string = element.tags[j].tag;
                     let result: string | false = validate_country(tag)
                     if (result != false) {
                         foreign_countries[result].push([element.shareURL!, element.title])
-                        // <a href=""></a>
+                        // <a href=''></a>
                     }
                 }
             }
@@ -188,6 +222,6 @@ function formatDate2(date: Date): string {
 }
 
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
     init()
 });
