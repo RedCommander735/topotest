@@ -8,4 +8,4 @@ Um es auszuführen, Repo clonen, dann
 TODO:
 -
 - [x] Zeitraum auswählen
-- [ ] Inhalt herunterladbar machen
+- [x] Inhalt herunterladbar machen
