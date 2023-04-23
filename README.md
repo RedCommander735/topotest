@@ -7,5 +7,5 @@ Um es auszuführen, Repo clonen, dann
 
 TODO:
 -
-- [ ] Zeitraum auswählen
+- [x] Zeitraum auswählen
 - [ ] Inhalt herunterladbar machen
