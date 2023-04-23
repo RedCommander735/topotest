@@ -24,7 +24,7 @@ function init() {
         })
     })
 
-    load.addEventListener("onclick", () => {
+    load.addEventListener("click", () => {
         update()
     })
 
@@ -44,6 +44,15 @@ async function update() {
     let startdate = new Date(start.value)
     let enddate = new Date(end.value)
 
+    if ((enddate.getTime() - startdate.getTime()) <= 0) {
+        let temp = startdate
+        startdate = enddate
+        enddate = temp
+    }
+
+    start.value = formatDate2(startdate)
+    end.value = formatDate2(enddate)
+    
     localStorage.start = start.value
     localStorage.end = end.value
 
@@ -162,6 +171,20 @@ function formatDate(date: Date): string {
         day = '0' + day
 
     return [year, month, day].join('')
+}
+
+function formatDate2(date: Date): string {
+    var d = new Date(date)
+    let month = '' + (d.getMonth() + 1)
+    let day = '' + d.getDate()
+    let year = d.getFullYear().toString()
+
+    if (month.length < 2)
+        month = '0' + month
+    if (day.length < 2)
+        day = '0' + day
+
+    return [year, month, day].join('-')
 }
 
 
