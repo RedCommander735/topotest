@@ -18,6 +18,10 @@ input {
   padding-top: 2px;
 }
 
+p {
+  margin-bottom: 0px;
+}
+
 a {
   font-weight: 500;
   color: rgba(255, 255, 255, 0.87);
@@ -49,6 +53,7 @@ h1 {
 #app {
   max-width: 90vw;
   margin: 0;
+  padding-top: 0.5rem !important;
   padding: 2rem;
   text-align: left;
 }
