@@ -84,43 +84,54 @@ async function update() {
     loadNews(news)
 }
 
-async function loadNews(foreign_countries: Record <string, string[][]> ) {
-
-    app.innerHTML = ''
+async function loadNews(foreign_countries: Record <string, string[][]>) {
+    let data = false
     for (const [key, value] of Object.entries(foreign_countries)) {
         if (value.length > 0) {
-            let country_wrapper: HTMLDivElement = document.createElement('div')
-            country_wrapper.classList.add('country_wrapper')
-
-            let country: HTMLDivElement = document.createElement('div')
-            country.classList.add('country')
-            let capital_city: string = await getCapitalByCountryName(key)
-
-            let text: Text = document.createTextNode(key + ' (' + capital_city + ')' + ': ');
-
-            country.appendChild(text);
-
-            country_wrapper.appendChild(country)
-
-            for (let i = 0; i < value.length; i++) {
-                const headline: string[] = value[i];
-
-                let headline_element: HTMLDivElement = document.createElement('div')
-                headline_element.classList.add('headline')
-
-                let marker: Text = document.createTextNode('- ')
-                let _headline = document.createElement('a')
-                _headline.href = headline[0]
-                _headline.appendChild(document.createTextNode(headline[1]))
-                // let _headline: Text = document.createTextNode(headline)
-                headline_element.appendChild(marker)
-                headline_element.appendChild(_headline)
-                country_wrapper.appendChild(headline_element)
-            }
-
-
-            app.appendChild(country_wrapper)
+            data = true
         }
+    }
+        
+    if (data) {
+
+        app.innerHTML = ''
+        for (const [key, value] of Object.entries(foreign_countries)) {
+            if (value.length > 0) {
+                let country_wrapper: HTMLDivElement = document.createElement('div')
+                country_wrapper.classList.add('country_wrapper')
+
+                let country: HTMLDivElement = document.createElement('div')
+                country.classList.add('country')
+                let capital_city: string = await getCapitalByCountryName(key)
+
+                let text: Text = document.createTextNode(key + ' (' + capital_city + ')' + ': ');
+
+                country.appendChild(text);
+
+                country_wrapper.appendChild(country)
+
+                for (let i = 0; i < value.length; i++) {
+                    const headline: string[] = value[i];
+
+                    let headline_element: HTMLDivElement = document.createElement('div')
+                    headline_element.classList.add('headline')
+
+                    let marker: Text = document.createTextNode('- ')
+                    let _headline = document.createElement('a')
+                    _headline.href = headline[0]
+                    _headline.appendChild(document.createTextNode(headline[1]))
+                    // let _headline: Text = document.createTextNode(headline)
+                    headline_element.appendChild(marker)
+                    headline_element.appendChild(_headline)
+                    country_wrapper.appendChild(headline_element)
+                }
+
+
+                app.appendChild(country_wrapper)
+            }
+        }
+    } else {
+        app.innerHTML = 'Den Datumszeitraum oben in die zwei Datenfelder eingeben, "Load" clicken und eine Liste von allen Nachrichten aus dem Ausland von der Tagesschau sortiert nach Land erhalten'
     }
 }
 
@@ -145,7 +156,7 @@ async function genText(foreign_countries: Record <string, string[][]> ) {
     return text
 }
 
-async function fetchNews(dates: String[]) {
+async function fetchNews(dates: string[]) {
     let foreign_countries: Record < string, string[][] > = gen_empty_object()
 
     for (let i = 0; i < dates.length; i++) {
