@@ -31,15 +31,7 @@ function init() {
         update()
     })
     download.addEventListener('click', async () => {
-        
-        let text = await genText(JSON.parse(localStorage.news))
-        const encoder = new TextEncoder();
-        const utf8Bytes = encoder.encode(text);
-
-        // Create a Blob object from the Uint8Array
-        const blob = new Blob([utf8Bytes], { type: 'text/plain; charset=utf-8' });
-        const objectUrl = URL.createObjectURL(blob);
-        window.open(objectUrl, '_blank')!.focus();
+        await genText(JSON.parse(localStorage.news))
     })
 
     try {
@@ -86,7 +78,7 @@ async function update() {
 
 async function loadNews(foreign_countries: Record <string, string[][]>) {
     let data = false
-    for (const [key, value] of Object.entries(foreign_countries)) {
+    for (const [, value] of Object.entries(foreign_countries)) {
         if (value.length > 0) {
             data = true
         }
@@ -136,24 +128,40 @@ async function loadNews(foreign_countries: Record <string, string[][]>) {
 }
 
 async function genText(foreign_countries: Record <string, string[][]> ) {
-    let text = ''
-    for (const [key, value] of Object.entries(foreign_countries)) {
+    let data = false
+    for (const [, value] of Object.entries(foreign_countries)) {
         if (value.length > 0) {
-            let capital_city: string = await getCapitalByCountryName(key)
-
-            let country: string = key + ' (' + capital_city + ')' + ': ';
-            text = text + country + '\n'
-
-            for (let i = 0; i < value.length; i++) {
-                const headline: string[] = value[i];
-
-                let _headline: string = headline[1]
-                text = text + ' - ' +_headline + '\n'
-            }
-            text = text + '\n'
+            data = true
         }
     }
-    return text
+        
+    if (data) {
+
+        let text = ''
+        for (const [key, value] of Object.entries(foreign_countries)) {
+            if (value.length > 0) {
+                let capital_city: string = await getCapitalByCountryName(key)
+
+                let country: string = key + ' (' + capital_city + ')' + ': ';
+                text = text + country + '\n'
+
+                for (let i = 0; i < value.length; i++) {
+                    const headline: string[] = value[i];
+
+                    let _headline: string = headline[1]
+                    text = text + ' - ' +_headline + '\n'
+                }
+                text = text + '\n'
+            }
+        }
+        const encoder = new TextEncoder();
+        const utf8Bytes = encoder.encode(text);
+
+        // Create a Blob object from the Uint8Array
+        const blob = new Blob([utf8Bytes], { type: 'text/plain; charset=utf-8' });
+        const objectUrl = URL.createObjectURL(blob);
+        window.open(objectUrl, '_blank')!.focus();
+    }
 }
 
 async function fetchNews(dates: string[]) {
