@@ -1,8 +1,10 @@
 # Topotest Schlagzeilensammler
 
-Kann ich leider nicht hosten, weil die von der Tagesschau nur privaten gebrauch erlauben und keine Veröffentlichung.
+Sammelt alle Schlagzeilen eines bestimmten Zeitraums aus dem Feed der Tagesschau und sortiert diese nach Land. Alle Artikel sind anclickbar und führen zur Originalseite.
 
-Um es auszuführen, Repo clonen, dann 
+--- [Link](https://redcommander735.github.io/topotest/) ---
+
+Um es auszuführen selbst, Repo clonen, dann 
 'npm install'  &rarr;  'npm run dev'
 
 TODO:
