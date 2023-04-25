@@ -4,7 +4,7 @@ Sammelt alle Schlagzeilen eines bestimmten Zeitraums aus dem Feed der Tagesschau
 
 --- [Link](https://redcommander735.github.io/topotest/) ---
 
-Um es auszuführen selbst, Repo clonen, dann 
+Um es selbst auszuführen, Repo clonen, dann 
 'npm install'  &rarr;  'npm run dev'
 
 TODO:
