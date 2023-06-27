@@ -49,6 +49,7 @@ async function update() {
 
     let startdate = new Date(start.value)
     let enddate = new Date(end.value)
+    
 
     if ((enddate.getTime() - startdate.getTime()) <= 0) {
         let temp = startdate
@@ -170,7 +171,9 @@ async function fetchNews(dates: string[]) {
     for (let i = 0; i < dates.length; i++) {
         const datestring = dates[i];
 
-        let url = `https://www.tagesschau.de/api2/newsfeed-101~_date-${datestring}.json`;
+        // let url = `https://www.tagesschau.de/api2/newsfeed-101~_date-${datestring}.json`;
+        let url = `https://www.tagesschau.de/api2u/news?date=${datestring}&ressort=ausland`;
+        
 
         let news: NewsElement[] = await fetch(url)
             .then(response => response.json())
