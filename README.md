@@ -1,6 +1,6 @@
 # Topotest Schlagzeilensammler
 
-Sammelt alle Schlagzeilen eines bestimmten Zeitraums aus dem Feed der Tagesschau und sortiert diese nach Land. Alle Artikel sind anclickbar und führen zur Originalseite.
+Sammelt alle Schlagzeilen eines bestimmten Zeitraums aus dem Feed der Tagesschau mit der [Tageschau API](https://github.com/AndreasFischer1985/tagesschau-api) und sortiert diese nach Land. Alle Artikel sind anclickbar und führen zur Originalseite.
 
 --- [Link](https://redcommander735.github.io/topotest/) ---
 
@@ -11,3 +11,4 @@ TODO:
 -
 - [x] Zeitraum auswählen
 - [x] Inhalt herunterladbar machen
+- [ ] Karte implementieren, auf der alle Länder markiert werden
