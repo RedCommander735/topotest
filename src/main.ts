@@ -35,7 +35,7 @@ function init() {
         update()
     })
     download.addEventListener('click', async () => {
-        await genText(JSON.parse(localStorage.news))
+        await genText(JSON.parse(localStorage.news), new Date(JSON.parse(localStorage.last_refresh)))
     })
 
     try {
@@ -159,7 +159,8 @@ async function loadNews(foreign_countries: Record <string, string[][]>, refresh:
     }
 }
 
-async function genText(foreign_countries: Record <string, string[][]> ) {
+async function genText(foreign_countries: Record <string, string[][]>, refresh: Date ) {
+    
     let data = false
     for (const [, value] of Object.entries(foreign_countries)) {
         if (value.length > 0) {
@@ -169,7 +170,7 @@ async function genText(foreign_countries: Record <string, string[][]> ) {
         
     if (data) {
 
-        let text = ''
+        let text = `Zuletzt aktualisiert: ${refresh.toLocaleDateString('de-DE', { year: 'numeric', month: '2-digit', day: '2-digit' })}, ${refresh.toLocaleTimeString()}` + '\n\n'
         for (const [key, value] of Object.entries(foreign_countries)) {
             if (value.length > 0) {
                 let capital_city: string = await getCapitalByCountryName(key)
@@ -183,7 +184,7 @@ async function genText(foreign_countries: Record <string, string[][]> ) {
                     let _headline: string = headline[1]
                     text = text + ' - ' + headline[2] + ': ' +_headline + '\n'
                 }
-                text = text + '\n' + '----------------------------------------'
+                text = text + '\n\n'
             }
         }
         const encoder = new TextEncoder();
