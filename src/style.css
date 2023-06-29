@@ -6,6 +6,7 @@
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
+  --backround: #242424;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -39,15 +40,16 @@ body {
   flex-direction: column;
 }
 
-#wrapper {
-  margin: 0;
-  /* display: flex; */
-  min-width: 320px;
-}
 
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+}
+
+#wrapper {
+  margin: 0;
+  /* display: flex; */
+  min-width: 320px;
 }
 
 #app {
@@ -62,6 +64,14 @@ h1 {
   padding-top: 10px;
 }
 
+#source {
+  font-size: 14px;
+}
+
+#source a {
+  text-decoration: underline;
+}
+
 .country_wrapper {
   border-bottom: 1px solid rgba(255, 255, 255, 0.87);
   padding: 10px;
@@ -70,10 +80,13 @@ h1 {
   font-weight: bold;
 }
 
+
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
     background-color: #ffffff;
+    --backround: #ffffff;
   }
   a:hover {
     color: #747bff;
