@@ -132,6 +132,10 @@ async function loadNews(foreign_countries: Record <string, string[][]>, time?: n
                     let marker: Text = document.createTextNode('- ')
                     let _headline = document.createElement('a')
                     _headline.href = headline[0]
+                    let topline = document.createElement('span')
+                    topline.appendChild(document.createTextNode(`${headline[2]}: `))
+                    topline.classList.add('topline')
+                    _headline.appendChild(topline)
                     _headline.appendChild(document.createTextNode(headline[1]))
                     // let _headline: Text = document.createTextNode(headline)
                     headline_element.appendChild(marker)
@@ -210,7 +214,7 @@ async function fetchNews(dates: string[]) {
                     const tag: string = element.tags[j].tag;
                     let result: string | false = validate_country(tag)
                     if (result != false) {
-                        foreign_countries[result].push([element.shareURL!, element.title])
+                        foreign_countries[result].push([element.shareURL!, element.title, element.topline!])
                         // <a href=''></a>
                     }
                 }
