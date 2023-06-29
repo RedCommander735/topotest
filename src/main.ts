@@ -176,7 +176,7 @@ async function genText(foreign_countries: Record <string, string[][]> ) {
                     let _headline: string = headline[1]
                     text = text + ' - ' + headline[2] + ': ' +_headline + '\n'
                 }
-                text = text + '\n'
+                text = text + '\n' + '----------------------------------------'
             }
         }
         const encoder = new TextEncoder();
