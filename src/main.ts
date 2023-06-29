@@ -9,6 +9,7 @@ let end: HTMLInputElement
 let load: HTMLButtonElement
 let download: HTMLButtonElement
 let infotext: HTMLParagraphElement
+let last_refresh: HTMLParagraphElement
 
 function init() {
     app = document.querySelector('#app')!
@@ -17,6 +18,7 @@ function init() {
     load = document.querySelector('#load')!
     download = document.querySelector('#download')!
     infotext = document.querySelector('#infotext')!
+    last_refresh = document.querySelector('#last_refresh')!
 
     let dates: HTMLInputElement[] = [start, end]
 
@@ -37,7 +39,7 @@ function init() {
     })
 
     try {
-        loadNews(JSON.parse(localStorage.news))
+        loadNews(JSON.parse(localStorage.news), new Date(JSON.parse(localStorage.last_refresh)))
         start.value = localStorage.start
         end.value = localStorage.end
     } catch {
@@ -47,6 +49,8 @@ function init() {
 }
 
 async function update() {
+    let refresh = new Date()
+    localStorage.last_refresh = JSON.stringify(refresh)
 
 
     let startdate = new Date(start.value)
@@ -79,10 +83,13 @@ async function update() {
     localStorage.news = JSON.stringify(news);
     const end_time = performance.now();
  
-    loadNews(news, end_time - start_time)
+    loadNews(news, refresh, end_time - start_time)
 }
 
-async function loadNews(foreign_countries: Record <string, string[][]>, time?: number) {
+async function loadNews(foreign_countries: Record <string, string[][]>, refresh: Date, time?: number) {
+
+    last_refresh.innerHTML = `Zuletzt aktualisiert: ${refresh.toLocaleDateString('de-DE', { year: 'numeric', month: '2-digit', day: '2-digit' })}, ${refresh.toLocaleTimeString()}`
+
     let counter = 0;
     let ccounter = 0;
     
