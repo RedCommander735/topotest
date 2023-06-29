@@ -174,7 +174,7 @@ async function genText(foreign_countries: Record <string, string[][]> ) {
                     const headline: string[] = value[i];
 
                     let _headline: string = headline[1]
-                    text = text + ' - ' +_headline + '\n'
+                    text = text + ' - ' + headline[2] + ': ' +_headline + '\n'
                 }
                 text = text + '\n'
             }
