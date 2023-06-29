@@ -8,6 +8,7 @@ let start: HTMLInputElement
 let end: HTMLInputElement
 let load: HTMLButtonElement
 let download: HTMLButtonElement
+let infotext: HTMLParagraphElement
 
 function init() {
     app = document.querySelector('#app')!
@@ -15,6 +16,7 @@ function init() {
     end = document.querySelector('#end')!
     load = document.querySelector('#load')!
     download = document.querySelector('#download')!
+    infotext = document.querySelector('#infotext')!
 
     let dates: HTMLInputElement[] = [start, end]
 
@@ -72,12 +74,30 @@ async function update() {
     })
 
     console.log(processedDates)
-    let news = await fetchNews(processedDates)
-    localStorage.news = JSON.stringify(news)
-    loadNews(news)
+    const start_time = performance.now();
+    let news = await fetchNews(processedDates);
+    localStorage.news = JSON.stringify(news);
+    const end_time = performance.now();
+ 
+    loadNews(news, end_time - start_time)
 }
 
-async function loadNews(foreign_countries: Record <string, string[][]>) {
+async function loadNews(foreign_countries: Record <string, string[][]>, time?: number) {
+    let counter = 0;
+    let ccounter = 0;
+    
+    Object.keys(foreign_countries).forEach((key) => {
+        if (foreign_countries[key].length > 0) {
+            ccounter++;
+        }
+        counter += foreign_countries[key].length
+    })
+    if (time == undefined) {
+        infotext.innerHTML = `Es wurden ${counter} Nachrichten aus ${ccounter} Ländern geladen. <br> Alle Einträge sind clickbar und führen zur Originalseite`
+    } else { 
+        infotext.innerHTML = `Es wurden ${counter} Nachrichten aus ${ccounter} Ländern in ${time} ms geladen. <br> Alle Einträge sind clickbar und führen zur Originalseite` 
+    }
+
     let data = false
     for (const [, value] of Object.entries(foreign_countries)) {
         if (value.length > 0) {
@@ -173,6 +193,7 @@ async function fetchNews(dates: string[]) {
 
         // let url = `https://www.tagesschau.de/api2/newsfeed-101~_date-${datestring}.json`;
         let url = `https://www.tagesschau.de/api2u/news?date=${datestring}&ressort=ausland`;
+        
         
 
         let news: NewsElement[] = await fetch(url)
