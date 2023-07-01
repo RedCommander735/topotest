@@ -29,7 +29,7 @@ async function init() {
     country_name = document.querySelector('#country_name')!
 
     // map.innerHTML = await fetch('/src/world.svg')
-    map.innerHTML = await fetch('https://raw.githubusercontent.com/RedCommander735/topotest/main/src/g747.svg')
+    map.innerHTML = await fetch('https://raw.githubusercontent.com/RedCommander735/topotest/main/src/world.svg')
         .then((response) => response.text());
 
 
