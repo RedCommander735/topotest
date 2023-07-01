@@ -1,5 +1,5 @@
 import './style.css'
-import { validate_country, gen_empty_object, getCapitalByCountryName } from './filter'
+import { validate_country, gen_empty_object, getCapitalByCountryName, getCodeByCountryName, getCountryNameByCode } from './filter'
 import { NewsElement } from './types';
 
 
@@ -10,8 +10,13 @@ let load: HTMLButtonElement
 let download: HTMLButtonElement
 let infotext: HTMLParagraphElement
 let last_refresh: HTMLParagraphElement
+let map: HTMLDivElement
+let toggle_map: HTMLButtonElement
+let paths: NodeListOf<HTMLElement>
+let country_name: HTMLParagraphElement
 
-function init() {
+async function init() {
+    let toggle = true;
     app = document.querySelector('#app')!
     start = document.querySelector('#start')!
     end = document.querySelector('#end')!
@@ -19,6 +24,39 @@ function init() {
     download = document.querySelector('#download')!
     infotext = document.querySelector('#infotext')!
     last_refresh = document.querySelector('#last_refresh')!
+    map = document.querySelector('#world_map')!
+    toggle_map = document.querySelector('#map')!
+    country_name = document.querySelector('#country_name')!
+
+    map.innerHTML = await fetch('/src/world.svg')
+        .then((response) => response.text());
+
+
+    paths = document.querySelectorAll('.path')!
+
+    console.log(paths.length)
+
+    for (let i = 0; i < paths.length; i++) {
+        let path = paths[i]
+
+        path.addEventListener("mouseover", (event) => {
+            event.preventDefault()
+            event.stopPropagation()
+
+            let target = event.target
+
+            if (target instanceof Element) {
+                if (target.classList.contains('marker')) {
+                    country_name.innerHTML = path.innerHTML
+                }
+            }
+
+        })
+        let name = getCountryNameByCode(path.id)!
+        path.innerHTML = `${name} (${await getCapitalByCountryName(name)})`
+    }
+
+
 
     let dates: HTMLInputElement[] = [start, end]
 
@@ -36,6 +74,24 @@ function init() {
     })
     download.addEventListener('click', async () => {
         await genText(JSON.parse(localStorage.news), new Date(JSON.parse(localStorage.last_refresh)))
+    })
+    toggle_map.addEventListener('click', () => {
+        if (toggle) {
+            infotext.style.display = 'none'
+            last_refresh.style.display = 'none'
+            app.style.display = 'none'
+            country_name.style.display = 'block'
+            map.style.display = 'block'
+            toggle = false
+        } else {
+            infotext.style.display = 'block'
+            last_refresh.style.display = 'block'
+            app.style.display = 'block'
+            country_name.style.display = 'none'
+            map.style.display = 'none'
+            toggle = true
+        }
+        
     })
 
     try {
@@ -130,6 +186,12 @@ async function loadNews(foreign_countries: Record <string, string[][]>, refresh:
 
                 country_wrapper.appendChild(country)
 
+                let country_code: string = await getCodeByCountryName(key)!
+                let cc: HTMLElement = document.querySelector(`#${country_code.toUpperCase()}`)!
+                cc.classList.add('marker')
+                cc.style.cssText += '';
+
+
                 for (let i = 0; i < value.length; i++) {
                     const headline: string[] = value[i];
 
@@ -199,6 +261,7 @@ async function genText(foreign_countries: Record <string, string[][]>, refresh: 
 
 async function fetchNews(dates: string[]) {
     let foreign_countries: Record < string, string[][] > = gen_empty_object()
+    let country_code: string | undefined
 
     for (let i = 0; i < dates.length; i++) {
         const datestring = dates[i];
@@ -222,7 +285,8 @@ async function fetchNews(dates: string[]) {
                     const tag: string = element.tags[j].tag;
                     let result: string | false = validate_country(tag)
                     if (result != false) {
-                        foreign_countries[result].push([element.shareURL!, element.title, element.topline!])
+                        country_code = getCodeByCountryName(result)!
+                        foreign_countries[result].push([element.shareURL!, element.title, element.topline!, country_code])
                         // <a href=''></a>
                     }
                 }

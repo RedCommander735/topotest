@@ -71,6 +71,25 @@ h1 {
 #source a {
   text-decoration: underline;
 }
+#world_map {
+  margin-left: 32px;
+  display: none;
+}
+#world_map svg {
+  fill: white;
+  transform-origin: top left;
+  transform: scale(1.29);
+}
+
+#country_name {
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+}
+path.marker:hover {
+  fill: pink;
+}
+
 
 .country_wrapper {
   border-bottom: 1px solid rgba(255, 255, 255, 0.87);
@@ -81,6 +100,9 @@ h1 {
 }
 .topline {
   color: rgba(255, 255, 255, 0.6);
+}
+.marker {
+  fill: red;
 }
 
 @media (prefers-color-scheme: light) {

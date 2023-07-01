@@ -5,7 +5,7 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Topotest</title>
-    <link rel="stylesheet" href="/src/style.css">
+    <link rel="stylesheet" href="/src/style.css"> 
   </head>
   <body>
     <div id="selector">
@@ -13,12 +13,16 @@
       <div>Ende: <input type="date" name="end" id="end"></div>
       <button id="load">Load</button>
       <button id="download">Download</button>
+      <button id="map">Toggle Map</button>
       <p id="last_refresh"></p>
       <p id="infotext"></p>
+      <p id="country_name"></p>
     </div>
     <div id="wrapper">
       <div id="app">Den Datumszeitraum oben in die zwei Datenfelder eingeben, "Load" clicken und eine Liste von allen Nachrichten aus dem Ausland von der Tagesschau sortiert nach Land erhalten</div>
     </div>
+    <div id="world_map"></div>
+    <div id="tooltip"></div>
     <p id="source">Sourcecode: <a href="https://github.com/RedCommander735/topotest">Topotest</a></p>
     <script type="module" src="/src/main.ts"></script>
   </body>
