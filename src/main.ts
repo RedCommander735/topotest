@@ -28,7 +28,7 @@ async function init() {
     toggle_map = document.querySelector('#map')!
     country_name = document.querySelector('#country_name')!
 
-    map.innerHTML = await fetch('/src/world.svg')
+    map.innerHTML = await fetch('https://raw.githubusercontent.com/RedCommander735/topotest/main/src/world.svg')
         .then((response) => response.text());
 
 
@@ -188,8 +188,7 @@ async function loadNews(foreign_countries: Record <string, string[][]>, refresh:
 
                 let country_code: string = await getCodeByCountryName(key)!
                 let cc: HTMLElement = document.querySelector(`#${country_code.toUpperCase()}`)!
-                cc.classList.add('marker')
-                cc.style.cssText += '';
+                cc.classList.add('marker');
 
 
                 for (let i = 0; i < value.length; i++) {
