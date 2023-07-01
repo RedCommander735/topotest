@@ -39,9 +39,21 @@ async function init() {
         country_name_tooltip.style.setProperty('--mouse-y', `${y}px`)
     });
 
-    map.innerHTML = await fetch('/src/g747.svg')
-    // map.innerHTML = await fetch('https://raw.githubusercontent.com/RedCommander735/topotest/main/src/world.svg')
-        .then((response) => response.text());
+    body.addEventListener('mouseover', (event) => {
+        if (event.target instanceof Element) {
+            if (!(event.target.classList.contains('path'))) {
+                country_name_tooltip.style.setProperty('display', 'none')
+            }
+        }
+    })
+
+    if (location.hostname == 'localhost') {
+        map.innerHTML = await fetch('/src/g747.svg')
+            .then((response) => response.text());
+    } else {
+        map.innerHTML = await fetch('https://raw.githubusercontent.com/RedCommander735/topotest/main/src/g747.svg')
+            .then((response) => response.text());
+    }   
 
 
     paths = document.querySelectorAll('.path')!
