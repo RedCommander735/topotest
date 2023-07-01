@@ -33,16 +33,20 @@ async function init() {
     let body = document.querySelector('body')!
 
     body.addEventListener("mousemove", (event) => {
-        let x = event.clientX
-        let y = event.clientY
-        country_name_tooltip.style.setProperty('--mouse-x', `${x}px`)
-        country_name_tooltip.style.setProperty('--mouse-y', `${y}px`)
+        if (!toggle) {
+            let x = event.clientX
+            let y = event.clientY
+            country_name_tooltip.style.setProperty('--mouse-x', `${x + window.scrollX}px`)
+            country_name_tooltip.style.setProperty('--mouse-y', `${y + window.scrollY}px`)
+        }
     });
 
     body.addEventListener('mouseover', (event) => {
-        if (event.target instanceof Element) {
-            if (!(event.target.classList.contains('path'))) {
-                country_name_tooltip.style.setProperty('display', 'none')
+        if (!toggle) {
+            if (event.target instanceof Element) {
+                if (!(event.target.classList.contains('path'))) {
+                    country_name_tooltip.style.setProperty('display', 'none')
+                }
             }
         }
     })
@@ -58,30 +62,24 @@ async function init() {
 
     paths = document.querySelectorAll('.path')!
 
-    console.log(paths.length)
-
     
 
     for (let i = 0; i < paths.length; i++) {
         let path = paths[i]
 
         path.addEventListener("mouseover", (event) => {
-            event.preventDefault()
-            event.stopPropagation()
+            if (!toggle) {
+                let target = event.target
 
-            
-
-            let target = event.target
-
-            if (target instanceof Element) {
-                if (target.classList.contains('marker')) {
-                    country_name.innerHTML = path.innerHTML
-                    country_name_tooltip.style.setProperty('display', 'block')
-                } else {
-                    country_name_tooltip.style.setProperty('display', 'none')
+                if (target instanceof Element) {
+                    if (target.classList.contains('marker')) {
+                        country_name.innerHTML = path.innerHTML
+                        country_name_tooltip.style.setProperty('display', 'block')
+                    } else {
+                        country_name_tooltip.style.setProperty('display', 'none')
+                    }
                 }
             }
-
         })
         let name = getCountryNameByCode(path.id)!
         path.innerHTML = `${name} (${await getCapitalByCountryName(name)})`
@@ -164,7 +162,7 @@ async function update() {
         processedDates.push(formatDate(date))
     })
 
-    console.log(processedDates)
+    // console.log(processedDates)
     const start_time = performance.now();
     let news = await fetchNews(processedDates);
     localStorage.news = JSON.stringify(news);
