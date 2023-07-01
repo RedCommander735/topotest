@@ -74,7 +74,6 @@ h1 {
 }
 #world_map {
   margin-left: 32px;
-  display: none;
   overflow: scroll;
   height: 85vh;
   cursor: grab;
@@ -94,7 +93,6 @@ h1 {
 
 #country_name_tooltip {
   z-index: 100;
-  display: none;
   top: calc(var(--mouse-y) + 10px);
   left: calc(var(--mouse-x) + 10px);
   background-color: white;
@@ -133,6 +131,9 @@ h1 {
 }
 .marker {
   fill: red;
+}
+.map {
+  display: none;
 }
 
 @media (prefers-color-scheme: light) {
