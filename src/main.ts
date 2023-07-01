@@ -13,6 +13,7 @@ let last_refresh: HTMLParagraphElement
 let map: HTMLDivElement
 let toggle_map: HTMLButtonElement
 let paths: NodeListOf<HTMLElement>
+let country_name_tooltip: HTMLDivElement
 let country_name: HTMLParagraphElement
 
 async function init() {
@@ -26,16 +27,28 @@ async function init() {
     last_refresh = document.querySelector('#last_refresh')!
     map = document.querySelector('#world_map')!
     toggle_map = document.querySelector('#map')!
+    country_name_tooltip = document.querySelector('#country_name_tooltip')!
     country_name = document.querySelector('#country_name')!
 
-    // map.innerHTML = await fetch('/src/world.svg')
-    map.innerHTML = await fetch('https://raw.githubusercontent.com/RedCommander735/topotest/main/src/world.svg')
+    let body = document.querySelector('body')!
+
+    body.addEventListener("mousemove", (event) => {
+        let x = event.clientX
+        let y = event.clientY
+        country_name_tooltip.style.setProperty('--mouse-x', `${x}px`)
+        country_name_tooltip.style.setProperty('--mouse-y', `${y}px`)
+    });
+
+    map.innerHTML = await fetch('/src/g747.svg')
+    // map.innerHTML = await fetch('https://raw.githubusercontent.com/RedCommander735/topotest/main/src/world.svg')
         .then((response) => response.text());
 
 
     paths = document.querySelectorAll('.path')!
 
     console.log(paths.length)
+
+    
 
     for (let i = 0; i < paths.length; i++) {
         let path = paths[i]
@@ -44,11 +57,16 @@ async function init() {
             event.preventDefault()
             event.stopPropagation()
 
+            
+
             let target = event.target
 
             if (target instanceof Element) {
                 if (target.classList.contains('marker')) {
                     country_name.innerHTML = path.innerHTML
+                    country_name_tooltip.style.setProperty('display', 'block')
+                } else {
+                    country_name_tooltip.style.setProperty('display', 'none')
                 }
             }
 

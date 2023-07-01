@@ -38,6 +38,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   flex-direction: column;
+  position: relative;
 }
 
 
@@ -80,9 +81,22 @@ h1 {
   width: auto;
 }
 
+#country_name_tooltip {
+  display: none;
+  top: calc(var(--mouse-y) + 10px);
+  left: calc(var(--mouse-x) + 10px);
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid black;
+  position: absolute;
+  color: black;
+}
+
 #country_name {
+  padding: 2px 4px;
+  margin: 0;
   text-align: center;
-  font-size: 20px;
+  font-size: 12px;
   font-weight: bold;
 }
 path.marker:hover {
