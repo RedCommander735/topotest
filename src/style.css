@@ -77,8 +77,9 @@ h1 {
 }
 #world_map svg {
   fill: white;
-  transform-origin: top left;
-  transform: scale(1.29);
+  height: calc(100vh - 140px - 35px);
+  width: auto;
+  aspect-ratio: auto;
 }
 
 #country_name {
