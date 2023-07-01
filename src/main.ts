@@ -53,8 +53,6 @@ async function init() {
     button_plus.addEventListener('click', () => {
         let current_zoom = map.style.getPropertyValue('--zoom-level')
         let current_zoom_num = parseFloat(current_zoom)
-        console.log(current_zoom)
-        console.log(current_zoom_num)
         map.style.setProperty('--zoom-level', limitNumberWithinRange(current_zoom_num + 0.5, 1, 10).toString())
     })
 
@@ -152,12 +150,39 @@ async function init() {
     })
 
     // Grab Scrolling for the map // container name: map
-    let position = {top: 0, left: 0, x: 0, y: 0};
+    let position = {old_x: 0, old_y:0}
     let scroll_toggle = false;
 
-    document.addEventListener('mousedown', (event) => {
-        mouseDownHandler(event, map, position, scroll_toggle)
+    map.addEventListener('mousedown', () => {
+        scroll_toggle = true
+        map.style.cursor = 'grabbing'
     })
+
+    map.addEventListener('mouseup', () => {
+        scroll_toggle = false
+        map.style.cursor = 'default'
+        position.old_x = 0
+        position.old_y = 0
+    });
+    map.addEventListener('mousemove', (event) => {
+        if (scroll_toggle) {
+            const dx = event.clientX - position.old_x
+            const dy = event.clientY - position.old_y
+
+            position.old_x = event.clientX
+            position.old_y = event.clientY
+
+            let old_scollTop = map.scrollTop
+            let old_scrollLeft = map.scrollLeft
+
+            console.log('first', map.scrollTop, map.scrollLeft)
+
+            map.scrollTop = old_scollTop - dy*8
+            map.scrollLeft = old_scrollLeft - dx*8
+
+            console.log('second',map.scrollTop, map.scrollLeft)
+        }
+    });
 
     try {
         loadNews(JSON.parse(localStorage.news), new Date(JSON.parse(localStorage.last_refresh)))
@@ -168,51 +193,6 @@ async function init() {
     }
 
 }
-
-function mouseDownHandler(event: MouseEvent, element: HTMLElement, position: {top: number, left: number, x: number, y: number}, toggle: boolean) {
-    position = {
-        // The current scroll
-        left: element.scrollLeft,
-        top: element.scrollTop,
-
-
-        // Get the current mouse position
-        x: event.clientX,
-        y: event.clientY,
-    };
-
-    toggle = true;
-
-    document.addEventListener('mousemove', (event) => {
-        mouseMoveHandler(event, element, position, toggle)
-    });
-    document.addEventListener('mouseup', () => {
-        mouseUpHandler(element, toggle)
-    });
-
-    element.style.cursor = 'grabbing';
-    element.style.userSelect = 'none';
-};
-
-function mouseUpHandler(element: HTMLElement, toggle: boolean) {
-    if (toggle) {
-        element.style.cursor = 'grab';
-        element.style.removeProperty('user-select');
-        toggle = false
-    }
-};
-
-function mouseMoveHandler(event: MouseEvent, element: HTMLElement, position: {top: number, left: number, x: number, y: number}, toggle: boolean) {
-    if (toggle) {
-        // How far the mouse has been moved
-        const dx = event.clientX - position.x;
-        const dy = event.clientY - position.y;
-
-        // Scroll the element
-        element.scrollTop = position.top - dy;
-        element.scrollLeft = position.left - dx;
-    }
-};
 
 async function update() {
     let refresh = new Date()

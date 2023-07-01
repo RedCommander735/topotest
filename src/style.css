@@ -76,7 +76,7 @@ h1 {
   margin-left: 32px;
   overflow: scroll;
   height: 85vh;
-  cursor: grab;
+  scroll-behavior: smooth;
 }
 
 #world_map svg {
