@@ -15,6 +15,9 @@ TODO:
 - [ ] Karte implementieren, auf der alle Länder markiert werden
 
 
+
+      
+
 # Topotest Headline Collector
 
 Collects all headlines from a specific time period from the Tagesschau feed using the [Tagesschau API](https://github.com/AndreasFischer1985/tagesschau-api) and sorts them by country. All articles are clickable and lead to the original article on the Tagesschau website.
