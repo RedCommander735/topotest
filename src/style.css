@@ -75,13 +75,25 @@ h1 {
 #world_map {
   margin-left: 32px;
   display: none;
+  overflow: scroll;
+  height: 85vh;
+  cursor: grab;
 }
+
 #world_map svg {
+  height: 99.3%;
   fill: white;
   width: auto;
+
+  zoom: var(--zoom-level);
+  -ms-zoom: var(--zoom-level);
+  -webkit-zoom: var(--zoom-level);
+  -moz-transform:  scale(var(--zoom-level),var(--zoom-level));
+  -moz-transform-origin: left center;
 }
 
 #country_name_tooltip {
+  z-index: 100;
   display: none;
   top: calc(var(--mouse-y) + 10px);
   left: calc(var(--mouse-x) + 10px);
@@ -99,11 +111,16 @@ h1 {
   font-size: 12px;
   font-weight: bold;
 }
-path.marker:hover {
-  fill: pink;
+
+#buttons {
+  margin-top: 5px;
+  display: flex;
+  gap: 5px;
 }
 
-
+.marker:hover {
+  fill: pink;
+}
 .country_wrapper {
   border-bottom: 1px solid rgba(255, 255, 255, 0.87);
   padding: 10px;

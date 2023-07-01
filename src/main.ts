@@ -16,6 +16,12 @@ let paths: NodeListOf<HTMLElement>
 let country_name_tooltip: HTMLDivElement
 let country_name: HTMLParagraphElement
 
+let button_minus: HTMLButtonElement
+let button_plus: HTMLBRElement
+
+let map_elements: NodeListOf<HTMLElement>
+let list_elements: NodeListOf<HTMLElement>
+
 async function init() {
     let toggle = true;
     app = document.querySelector('#app')!
@@ -30,9 +36,29 @@ async function init() {
     country_name_tooltip = document.querySelector('#country_name_tooltip')!
     country_name = document.querySelector('#country_name')!
 
-    let body = document.querySelector('body')!
+    button_minus = document.querySelector('#minus')!
+    button_plus = document.querySelector('#plus')!
 
-    body.addEventListener("mousemove", (event) => {
+    map_elements = document.querySelectorAll('.map')!
+    list_elements = document.querySelectorAll('.list')!
+
+    map.style.setProperty('--zoom-level', '1')
+
+    button_minus.addEventListener('click', () => {
+        let current_zoom = map.style.getPropertyValue('--zoom-level')
+        let current_zoom_num = parseFloat(current_zoom)
+        map.style.setProperty('--zoom-level', limitNumberWithinRange(current_zoom_num - 0.5, 1, 10).toString())
+    })
+
+    button_plus.addEventListener('click', () => {
+        let current_zoom = map.style.getPropertyValue('--zoom-level')
+        let current_zoom_num = parseFloat(current_zoom)
+        console.log(current_zoom)
+        console.log(current_zoom_num)
+        map.style.setProperty('--zoom-level', limitNumberWithinRange(current_zoom_num + 0.5, 1, 10).toString())
+    })
+
+    document.addEventListener("mousemove", (event) => {
         if (!toggle) {
             let x = event.clientX
             let y = event.clientY
@@ -41,7 +67,7 @@ async function init() {
         }
     });
 
-    body.addEventListener('mouseover', (event) => {
+    document.addEventListener('mouseover', (event) => {
         if (!toggle) {
             if (event.target instanceof Element) {
                 if (!(event.target.classList.contains('path'))) {
@@ -106,21 +132,31 @@ async function init() {
     })
     toggle_map.addEventListener('click', () => {
         if (toggle) {
-            infotext.style.display = 'none'
-            last_refresh.style.display = 'none'
-            app.style.display = 'none'
-            country_name.style.display = 'block'
-            map.style.display = 'block'
+            list_elements.forEach((element) => {
+                element.style.display = 'none'
+            })
+            map_elements.forEach((element) => {
+                element.style.display = 'block'
+            })
             toggle = false
         } else {
-            infotext.style.display = 'block'
-            last_refresh.style.display = 'block'
-            app.style.display = 'block'
-            country_name.style.display = 'none'
-            map.style.display = 'none'
+            list_elements.forEach((element) => {
+                element.style.display = 'block'
+            })
+            map_elements.forEach((element) => {
+                element.style.display = 'none'
+            })
             toggle = true
         }
         
+    })
+
+    // Grab Scrolling for the map // container name: map
+    let position = {top: 0, left: 0, x: 0, y: 0};
+    let scroll_toggle = false;
+
+    document.addEventListener('mousedown', (event) => {
+        mouseDownHandler(event, map, position, scroll_toggle)
     })
 
     try {
@@ -132,6 +168,51 @@ async function init() {
     }
 
 }
+
+function mouseDownHandler(event: MouseEvent, element: HTMLElement, position: {top: number, left: number, x: number, y: number}, toggle: boolean) {
+    position = {
+        // The current scroll
+        left: element.scrollLeft,
+        top: element.scrollTop,
+
+
+        // Get the current mouse position
+        x: event.clientX,
+        y: event.clientY,
+    };
+
+    toggle = true;
+
+    document.addEventListener('mousemove', (event) => {
+        mouseMoveHandler(event, element, position, toggle)
+    });
+    document.addEventListener('mouseup', () => {
+        mouseUpHandler(element, toggle)
+    });
+
+    element.style.cursor = 'grabbing';
+    element.style.userSelect = 'none';
+};
+
+function mouseUpHandler(element: HTMLElement, toggle: boolean) {
+    if (toggle) {
+        element.style.cursor = 'grab';
+        element.style.removeProperty('user-select');
+        toggle = false
+    }
+};
+
+function mouseMoveHandler(event: MouseEvent, element: HTMLElement, position: {top: number, left: number, x: number, y: number}, toggle: boolean) {
+    if (toggle) {
+        // How far the mouse has been moved
+        const dx = event.clientX - position.x;
+        const dy = event.clientY - position.y;
+
+        // Scroll the element
+        element.scrollTop = position.top - dy;
+        element.scrollLeft = position.left - dx;
+    }
+};
 
 async function update() {
     let refresh = new Date()
@@ -368,6 +449,12 @@ function formatDate2(date: Date): string {
 
     return [year, month, day].join('-')
 }
+
+function limitNumberWithinRange(num: number, min: number, max: number){
+    const MIN = min;
+    const MAX = max;
+    return Math.min(Math.max(num, MIN), MAX)
+  }
 
 
 document.addEventListener('DOMContentLoaded', () => {

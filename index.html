@@ -8,23 +8,27 @@
     <link rel="stylesheet" href="/src/style.css"> 
   </head>
   <body>
-    <div id="country_name_tooltip">
+    <div id="country_name_tooltip" class="map">
       <p id="country_name">Test</p>
     </div>
     <div id="selector">
       <div>Start: <input type="date" name="start" id="start"></div>
       <div>Ende: <input type="date" name="end" id="end"></div>
-      <button id="load">Load</button>
-      <button id="download">Download</button>
-      <button id="map">Toggle Map</button>
-      <p id="last_refresh"></p>
-      <p id="infotext"></p>
+      <div id="buttons">
+        <button id="load">Load</button>
+        <button id="download">Download</button>
+        <button id="map">Toggle Map</button>
+        <button id="plus" class="map"> + </button>
+        <button id="minus" class="map"> - </button>
+      </div>
+      <p id="last_refresh" class="list"></p>
+      <p id="infotext" class="list"></p>
     </div>
-    <div id="wrapper">
+    <div id="wrapper" class="list">
       <div id="app">Den Datumszeitraum oben in die zwei Datenfelder eingeben, "Load" clicken und eine Liste von allen Nachrichten aus dem Ausland von der Tagesschau sortiert nach Land erhalten</div>
     </div>
-    <div id="world_map"></div>
-    <div id="tooltip"></div>
+    <div id="world_map" class="map"></div>
+    <div id="tooltip" class="map"></div>
     <p id="source">Sourcecode: <a href="https://github.com/RedCommander735/topotest">Topotest</a></p>
     <script type="module" src="/src/main.ts"></script>
   </body>
