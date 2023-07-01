@@ -84,9 +84,8 @@ h1 {
   fill: white;
   width: auto;
 
-  zoom: var(--zoom-level);
-  -ms-zoom: var(--zoom-level);
-  -webkit-zoom: var(--zoom-level);
+  transform:  scale(var(--zoom-level));
+  transform-origin: left center;
   -moz-transform:  scale(var(--zoom-level),var(--zoom-level));
   -moz-transform-origin: left center;
 }
