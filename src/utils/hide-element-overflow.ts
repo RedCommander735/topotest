@@ -44,7 +44,7 @@ export function hideElementOverflow({element, CONTAINER_WITH_OVERFLOW_HIDDEN_CSS
 
   // returns an element with .stopHiddenOverflowBehavior() method to
   // help remove behavior from element, if needed
-  return Object.assign(element, {
+  return Object.assign((element as ZoomDragHTMLElement), {
     stopHiddenOverflowBehavior() {
       element?.parentElement?.classList.remove(CONTAINER_WITH_OVERFLOW_HIDDEN_CSS_CLASS);
       return element;
