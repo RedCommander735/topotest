@@ -72,22 +72,15 @@ h1 {
 #source a {
   text-decoration: underline;
 }
-#world_map {
+#map_container {
   margin-left: 32px;
-  overflow: scroll;
   height: 85vh;
-  scroll-behavior: smooth;
 }
 
-#world_map svg {
+#map_container svg {
   height: 99.3%;
   fill: white;
   width: auto;
-
-  transform:  scale(var(--zoom-level));
-  transform-origin: left center;
-  -moz-transform:  scale(var(--zoom-level),var(--zoom-level));
-  -moz-transform-origin: left center;
 }
 
 #country_name_tooltip {
@@ -99,6 +92,7 @@ h1 {
   border: 1px solid black;
   position: absolute;
   color: black;
+  display: none;
 }
 
 #country_name {

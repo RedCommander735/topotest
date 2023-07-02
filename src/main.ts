@@ -1,6 +1,7 @@
 import './style.css'
 import { validate_country, gen_empty_object, getCapitalByCountryName, getCodeByCountryName, getCountryNameByCode } from './filter'
 import { NewsElement } from './types';
+import { makeElementDraggable, makeElementZoomable } from './utils';
 
 
 let app: HTMLDivElement
@@ -15,9 +16,6 @@ let toggle_map: HTMLButtonElement
 let paths: NodeListOf<HTMLElement>
 let country_name_tooltip: HTMLDivElement
 let country_name: HTMLParagraphElement
-
-let button_minus: HTMLButtonElement
-let button_plus: HTMLBRElement
 
 let map_elements: NodeListOf<HTMLElement>
 let list_elements: NodeListOf<HTMLElement>
@@ -36,25 +34,8 @@ async function init() {
     country_name_tooltip = document.querySelector('#country_name_tooltip')!
     country_name = document.querySelector('#country_name')!
 
-    button_minus = document.querySelector('#minus')!
-    button_plus = document.querySelector('#plus')!
-
     map_elements = document.querySelectorAll('.map')!
     list_elements = document.querySelectorAll('.list')!
-
-    map.style.setProperty('--zoom-level', '1')
-
-    button_minus.addEventListener('click', () => {
-        let current_zoom = map.style.getPropertyValue('--zoom-level')
-        let current_zoom_num = parseFloat(current_zoom)
-        map.style.setProperty('--zoom-level', limitNumberWithinRange(current_zoom_num - 0.5, 1, 10).toString())
-    })
-
-    button_plus.addEventListener('click', () => {
-        let current_zoom = map.style.getPropertyValue('--zoom-level')
-        let current_zoom_num = parseFloat(current_zoom)
-        map.style.setProperty('--zoom-level', limitNumberWithinRange(current_zoom_num + 0.5, 1, 10).toString())
-    })
 
     document.addEventListener("mousemove", (event) => {
         if (!toggle) {
@@ -82,7 +63,6 @@ async function init() {
         map.innerHTML = await fetch('https://raw.githubusercontent.com/RedCommander735/topotest/main/src/g747.svg')
             .then((response) => response.text());
     }   
-
 
     paths = document.querySelectorAll('.path')!
 
@@ -149,40 +129,20 @@ async function init() {
         
     })
 
-    // Grab Scrolling for the map // container name: map
-    let position = {old_x: 0, old_y:0}
-    let scroll_toggle = false;
+    let draggableElement = makeElementDraggable({element: map, isOverflowHiddenDesired: true})!;
+      
+    // now you can zoom element inside it's parent
+    let zoomableElement = makeElementZoomable({element: map, steps: 5, MAX: 10})!;
 
-    map.addEventListener('mousedown', () => {
-        scroll_toggle = true
-        map.style.cursor = 'grabbing'
-    })
-
-    map.addEventListener('mouseup', () => {
-        scroll_toggle = false
-        map.style.cursor = 'default'
-        position.old_x = 0
-        position.old_y = 0
-    });
-    map.addEventListener('mousemove', (event) => {
-        if (scroll_toggle) {
-            const dx = event.clientX - position.old_x
-            const dy = event.clientY - position.old_y
-
-            position.old_x = event.clientX
-            position.old_y = event.clientY
-
-            let old_scollTop = map.scrollTop
-            let old_scrollLeft = map.scrollLeft
-
-            console.log('first', map.scrollTop, map.scrollLeft)
-
-            map.scrollTop = old_scollTop - dy*8
-            map.scrollLeft = old_scrollLeft - dx*8
-
-            console.log('second',map.scrollTop, map.scrollLeft)
+    document.onwheel = (event) => {
+        event.preventDefault();
+        if (zoomableElement.currentZoom() == 1) {
+            draggableElement.stopDraggableBehavior()
+        } else {
+            draggableElement = makeElementDraggable({element: map, isOverflowHiddenDesired: true})!;
         }
-    });
+    }
+
 
     try {
         loadNews(JSON.parse(localStorage.news), new Date(JSON.parse(localStorage.last_refresh)))
@@ -429,13 +389,6 @@ function formatDate2(date: Date): string {
 
     return [year, month, day].join('-')
 }
-
-function limitNumberWithinRange(num: number, min: number, max: number){
-    const MIN = min;
-    const MAX = max;
-    return Math.min(Math.max(num, MIN), MAX)
-  }
-
 
 document.addEventListener('DOMContentLoaded', () => {
     init()
