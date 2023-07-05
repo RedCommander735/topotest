@@ -12,7 +12,9 @@ TODO:
 - [x] Zeitraum auswählen
 - [x] Inhalt herunterladbar machen
 - [ ] Möglichkeit Toplines auszuschalten
-- [ ] Karte implementieren, auf der alle Länder markiert werden
+- [x] Karte implementieren, auf der alle Länder markiert werden
+- [ ] Auf Städte in den Tags checken
+- [ ] Eigenen [scraper](https://github.com/RedCommander735/tagesschau-scraper/tree/main) bauen. 
 
 <br><br><br>
 
