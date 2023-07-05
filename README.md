@@ -31,5 +31,6 @@ TODO:
 - [x] Make content downloadable
 - [ ] Option to disable top lines
 - [x] Implement a map with all countries marked
+- [ ] Check tags for relevant cities too I guess
 - [ ] Build own [scraper](https://github.com/RedCommander735/tagesschau-scraper/tree/main) for the Tagesschau website so that this isn't dependant on the API. 
 
