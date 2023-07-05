@@ -13,7 +13,7 @@ TODO:
 - [x] Inhalt herunterladbar machen
 - [ ] Möglichkeit Toplines auszuschalten
 - [x] Karte implementieren, auf der alle Länder markiert werden
-- [ ] Auf Städte in den Tags checken
+- [ ] Auf Städte in den Tags checken (über OpenStreetmap oder so)
 - [ ] Eigenen [scraper](https://github.com/RedCommander735/tagesschau-scraper/tree/main) bauen. 
 
 <br><br><br>
