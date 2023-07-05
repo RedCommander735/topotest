@@ -30,5 +30,6 @@ TODO:
 - [x] Select time period
 - [x] Make content downloadable
 - [ ] Option to disable top lines
-- [ ] Implement a map with all countries marked
+- [x] Implement a map with all countries marked
+- [ ] Build own [scraper](https://github.com/RedCommander735/tagesschau-scraper/tree/main) for the Tagesschau website so that this isn't dependant on the API. 
 
